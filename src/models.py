@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, ForeignKey,Boolean
+from sqlalchemy import String, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from typing import List
 
@@ -11,10 +11,11 @@ class FavouritePlanet(db.Model):
     planet_id: Mapped[int] = mapped_column(ForeignKey("planets.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
-    user: Mapped["User"] = relationship(back_populates="user_favourites_planet")
-    planet: Mapped["Planets"] = relationship(back_populates="planets_favorites")
-    
-  
+    user: Mapped["User"] = relationship(
+        back_populates="user_favourites_planet")
+    planet: Mapped["Planets"] = relationship(
+        back_populates="planets_favorites")
+
     def serialize(self):
         return {
             "id": self.id,
@@ -28,9 +29,9 @@ class FavouritePeople(db.Model):
     people_id: Mapped[int] = mapped_column(ForeignKey("people.id"))
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
 
-
-    user: Mapped["User"] = relationship(back_populates="user_favourites_people")
-    people: Mapped["People"]= relationship(back_populates="peoples_favorites")
+    user: Mapped["User"] = relationship(
+        back_populates="user_favourites_people")
+    people: Mapped["People"] = relationship(back_populates="peoples_favorites")
 
     def serialize(self):
         return {
@@ -48,8 +49,10 @@ class User(db.Model):
 
     is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
 
-    user_favourites_people: Mapped[List["FavouritePeople"]]= relationship(back_populates="user")
-    user_favourites_planet: Mapped[List["FavouritePlanet"]]= relationship(back_populates="user")
+    user_favourites_people: Mapped[List["FavouritePeople"]] = relationship(
+        back_populates="user")
+    user_favourites_planet: Mapped[List["FavouritePlanet"]] = relationship(
+        back_populates="user")
 
     def serialize(self):
         return {
@@ -69,9 +72,10 @@ class Planets(db.Model):
     gravity: Mapped[int] = mapped_column(nullable=False)
     image: Mapped[str] = mapped_column(String(120), nullable=False)
 
-    planets_favorites: Mapped[List["FavouritePlanet"]] = relationship(back_populates="planet")
-    people: Mapped[list["People"]]= relationship(back_populates="planet")
-  
+    planets_favorites: Mapped[List["FavouritePlanet"]
+                              ] = relationship(back_populates="planet")
+    people: Mapped[list["People"]] = relationship(back_populates="planet")
+
     def serialize(self):
         return {
             "id": self.id,
@@ -95,10 +99,9 @@ class People(db.Model):
     image: Mapped[str] = mapped_column(String(120), nullable=False)
     planet_of_birth: Mapped[int] = mapped_column(ForeignKey("planets.id"))
 
-    planet:Mapped["Planets"] = relationship(back_populates="people")
-    peoples_favorites: Mapped[List["FavouritePeople"]]= relationship(back_populates="people")
-
-
+    planet: Mapped["Planets"] = relationship(back_populates="people")
+    peoples_favorites: Mapped[List["FavouritePeople"]
+                              ] = relationship(back_populates="people")
 
     def serialize(self):
         return {
